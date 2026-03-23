@@ -45,7 +45,7 @@ def AadhaarQrAuto(data):
     if isSecureQr(data):
         return pyaadhaar.decode.AdhaarSecureQr(int(data))
     else:
-        return pyaadhaar.decode.AdhaarOldQr(data)
+        return pyaadhaar.decode.AadhaarOldQr(data)
 
 
 def Qr_img_to_text(file):
