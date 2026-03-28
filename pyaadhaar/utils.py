@@ -43,7 +43,7 @@ def AadhaarQrAuto(data):
     # create the object of respective class and will return the oobject
 
     if isSecureQr(data):
-        return pyaadhaar.decode.AdhaarSecureQr(int(data))
+        return pyaadhaar.decode.AadhaarSecureQr(int(data))
     else:
         return pyaadhaar.decode.AadhaarOldQr(data)
 
