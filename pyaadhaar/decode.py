@@ -241,7 +241,7 @@ class AadhaarSecureQr:
                         return False
             
                 return True
-            return match_masked(masked, real)
+            return match_masked(raw_email_str, emailid)
             
         # For V2, use hash-based verification
         else:
