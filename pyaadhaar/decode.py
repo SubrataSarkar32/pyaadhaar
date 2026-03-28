@@ -215,33 +215,33 @@ class AadhaarSecureQr:
     def verifyEmail(self, emailid: str) -> bool:
         if not isinstance(emailid, str):
             raise TypeError("Email id should be string")
-        
-        # For V3/V5: email is stored in the text block after all fields
+
+        # For V5: email is stored in the text block after all fields
         if 'version' in self.data and self.data.get('version') in ('V3', 'V5'):
             # Find the last text delimiter (before signature)
-            # The last text field is 'last_4_digits_mobile_no' or similar
-            # So we use the last index in self.details
-            last_text_idx = len(self.details) - 1 if 'last_4_digits_mobile_no' not in self.details else len(self.details) - 2
-            email_start = self.delimeter[last_text_idx] + 1
-            email_end = len(self.decompressed_array) - 256  # signature starts at -256
-    
+            email_start = self.delimeter[-1] + 2
+            email_end = len(self.decompressed_array) - \
+                256  # signature starts at -256
+
             # Extract raw bytes and decode
             raw_email_bytes = self.decompressed_array[email_start:email_end]
-            raw_email_str = raw_email_bytes.decode("ISO-8859-1", errors='ignore')
-    
+            email_str = raw_email_bytes.decode('ascii')
+            print("Email in QR", email_str)
+            print("Email passed", emailid)
+
             # Match the characters expect masked ones
             def match_masked(masked, real):
                 # 1. Length must match
                 if len(masked) != len(real):
                     return False
-            
+
                 # 2. Check each character
                 for m, r in zip(masked, real):
                     if m != 'x' and m != r:
                         return False
-            
+
                 return True
-            return match_masked(raw_email_str, emailid)
+            return match_masked(email_str, emailid)
             
         # For V2, use hash-based verification
         else:
